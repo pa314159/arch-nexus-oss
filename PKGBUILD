@@ -1,7 +1,7 @@
 # Maintainer: pappy <pa314159@users.noreply.github.com>
 
-_version=3.67.1
-_patch=01
+_version=3.68.1
+_patch=02
 
 pkgname=nexus-oss
 pkgver=${_version}.${_patch}
@@ -27,7 +27,7 @@ source=(
 		"$pkgname.vmoptions"
 		"pref_jre.cfg"
 		)
-sha256sums=('23a4145bbe0edb1670a596c7019a74ac373ad6fd0a9c5c699c9568b62150d40b'
+sha256sums=('5474b8283160537763b5e0f30c07b8dd3648c111bff1b6fbbb7baca0e0894b93'
             '3d2ebc2a796dbdc7e7e3b97e4c3272292169c898776e111f503f0517e434caff'
             '4134913c858fffa86d8873d16ff5d92b337289ff14f2f3776a36614361b8472d'
             'dcdef5614db12f38b3da0b9de1b52fb7fa402af6621a825981c6168a34a6ad9b'
