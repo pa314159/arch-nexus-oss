@@ -6,7 +6,7 @@ pkgbase = nexus-oss
 	install = nexus-oss.install
 	arch = any
 	license = custom:nexus-oss
-	depends = java-runtime=11
+	depends = java-runtime-headless=11
 	provides = nexus-oss
 	replaces = nexus3
 	backup = var/lib/nexus-oss/etc/nexus.properties

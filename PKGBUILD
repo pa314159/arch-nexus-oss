@@ -10,7 +10,7 @@ pkgdesc='Nexus 3 Repository OSS'
 arch=('any')
 url='http://nexus.sonatype.org'
 license=("custom:$pkgname")
-depends=('java-runtime=11')
+depends=('java-runtime-headless=11')
 replaces=('nexus3')
 provides=($pkgname)
 backup=("var/lib/$pkgname/etc/nexus.properties"
