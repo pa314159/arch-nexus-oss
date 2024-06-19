@@ -5,3 +5,5 @@ pkg
 src
 *.xz
 *.gz
+*.zst
+*.bz2

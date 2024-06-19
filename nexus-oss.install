@@ -1,3 +1,16 @@
+show_release_notes()
+{
+	dash_version=$(pacman -Q nexus-oss|sed -E 's/.+\s//; s/-.+//; s/\./-/g'|cut -d- -f1-3)
+	cat <<EOF
+
+Starting with version 3.69.0-02, this package requires Java 11.
+
+Check Release Notes at
+    https://help.sonatype.com/en/sonatype-nexus-repository-${dash_version}-release-notes.html	
+
+EOF
+}
+
 post_install()
 {
 	systemd-sysusers nexus-oss.conf
@@ -13,24 +26,15 @@ To change these settings edit the file
 
 	/var/lib/nexus-oss/etc/nexus.properties
 
-Sonatype strongly suggests using the latest Java 8 release version of Java
-available from Oracle. Support for Java 9 has not been verified - DO NOT USE IT.
-
-See https://help.sonatype.com/display/NXRM3/System+Requirements#SystemRequirements-Java
-
 EOF
+
+	show_release_notes
 }
 
 post_upgrade()
 {
 	systemctl daemon-reload
-
-	cat <<EOF
-
-See Release Notes at
-	https://help.sonatype.com/repomanager3/product-information/release-notes/2022-release-notes
-
-EOF
+	show_release_notes
 }
 
 pre_remove()

@@ -1,6 +1,6 @@
 # Maintainer: pappy <pa314159@users.noreply.github.com>
 
-_version=3.68.1
+_version=3.69.0
 _patch=02
 
 pkgname=nexus-oss
@@ -10,7 +10,7 @@ pkgdesc='Nexus 3 Repository OSS'
 arch=('any')
 url='http://nexus.sonatype.org'
 license=("custom:$pkgname")
-depends=('jre8-openjdk-headless')
+depends=('java-runtime=11')
 replaces=('nexus3')
 provides=($pkgname)
 backup=("var/lib/$pkgname/etc/nexus.properties"
@@ -18,7 +18,6 @@ backup=("var/lib/$pkgname/etc/nexus.properties"
 		)
 source=(
 		"https://download.sonatype.com/nexus/3/nexus-$_version-$_patch-unix.tar.gz"
-		"$pkgname"
 		"$pkgname.install"
 		"$pkgname.properties"
 		"$pkgname.service"
@@ -27,21 +26,21 @@ source=(
 		"$pkgname.vmoptions"
 		"pref_jre.cfg"
 		)
-sha256sums=('5474b8283160537763b5e0f30c07b8dd3648c111bff1b6fbbb7baca0e0894b93'
-            '3d2ebc2a796dbdc7e7e3b97e4c3272292169c898776e111f503f0517e434caff'
-            '4134913c858fffa86d8873d16ff5d92b337289ff14f2f3776a36614361b8472d'
+sha256sums=('eec80b3ee33dde61443e54dddea258f851951c4aef81c4c6256c1205ca818162'
+            '938c04841139a231891e367220af57fe10c93b8d7b9bd49c8732fbf461a120f8'
             'dcdef5614db12f38b3da0b9de1b52fb7fa402af6621a825981c6168a34a6ad9b'
-            '3670748854d3f05623c9a8826605c3e2a97c7b3955104e74b5eed00ed17299c1'
+            '28d947b261c9087a16b0d5313aae92deccb03d4e109102eb702f4ab7e4899f44'
             '77d699b5ccf6387fa2f69df2cd71cdb75b4ffbf46a10110dd6c0e2802783dbef'
-            '281193f73951d2e68c04f3686eea031be56771cbb1148e443e2a6f15a35df6c3'
-            '62da3195207e23e6945082cd7898ca1e1f22eb52d0538977ab2caf4d1186d8d8'
-            '55fb2aeb4eb3f54c59963870cf43bf5a898a014826d530bf37729fc5e2bc2463')
+            'efd66ac28e622cdf58f5733bdced6654b170558834c3e4304b3a2dfb7d964994'
+            '91ecb4f23b8a68ce7f1c7a9307dcbc745244a51173feec0fc47c5587b7769ab3'
+            'd713e29b72522fe4395b6959d27e2a98a24961393e08df7a6b022b1fd77c650d')
 
 install=$pkgname.install
 
 package() {
 	install -dm755 $pkgdir/usr/lib
 	install -dm750 $pkgdir/var/lib/$pkgname
+	install -dm750 $pkgdir/var/log/$pkgname
 
 	cp -a $srcdir/nexus-$_version-$_patch $pkgdir/usr/lib/$pkgname
 
@@ -54,7 +53,6 @@ package() {
 	install -Dm640 $srcdir/$pkgname.properties $pkgdir/var/lib/$pkgname/etc/nexus.properties
 
 	install -Dm644 $srcdir/nexus-$_version-$_patch/OSS-LICENSE.txt $pkgdir/usr/share/licenses/$pkgname/LICENSE
-	install -Dm755 $srcdir/$pkgname $pkgdir/usr/bin/$pkgname
 	install -Dm644 $srcdir/$pkgname.vmoptions $pkgdir/usr/lib/$pkgname/bin/nexus.vmoptions
 	install -Dm644 $pkgname.service "$pkgdir/usr/lib/systemd/system/$pkgname.service"
 	install -Dm644 $pkgname.tmpfiles "$pkgdir/usr/lib/tmpfiles.d/$pkgname.conf"
