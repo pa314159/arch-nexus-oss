@@ -1,22 +1,22 @@
-show_release_notes()
+show_upgrade_notes()
 {
+	local old_version=$1
+
 	cat <<EOF
+	Starting with version 3.71.0, Nexus Repository no longer supports
+	OrientDB, Java 8, or Java 11.
 
-Starting with version 3.71.0, Nexus Repository will no longer support
-OrientDB, Java 8, or Java 11.
+	You must migrate to H2 before upgrading to version 3.71.0. Review the
+	upgrade instructions for versions 3.71.0 and beyond at:
+	
+	    https://help.sonatype.com/en/orient-3-70-java-8-or-11.html
 
-You must migrate to H2 before upgrading to version 3.71.0. Review the
-upgrade instructions for versions 3.71.0 and beyond at:
+	The current version is ${old_version}, please upgrade to 3.70.2 first and
+	perform the migration as described in the page mentioned above. See 
+	commit 5cd4a326be92fbb5993928c9bfcd6dc428ad1963 in AUR.
 
-    https://help.sonatype.com/en/orient-3-70-java-8-or-11.html
 
-If enabled, Nexus OSS service will be stopped and disabled, you can
-enable it manually after migration.
-
-You can find nexus-db-migrator.jar in "/usr/lib/nexus-oss/bin". Make sure
-you use Java-11 for migration, or the migration will fail.
-
-BACKUP everything before anything else!!!
+	Aborting upgrade (${PPID}) now...
 
 EOF
 }
@@ -45,23 +45,25 @@ post_install()
 {
 	systemd-sysusers nexus-oss.conf
 	systemd-tmpfiles --create nexus-oss.conf
-
-	show_release_notes
 }
 
-post_upgrade()
+pre_upgrade()
 {
 	local new_version=$1
 	local old_version=$2
 
-	if ver_lt $old_version $new_version || ! migration_done; then
-		show_release_notes
+	if ver_lt $old_version 3.70.2.01 || ! migration_done; then
+		show_upgrade_notes $old_version
 
-		systemctl stop nexus-oss
-		systemctl disable nexus-oss
-	else
-		systemctl daemon-reload
+		rm -f /var/lib/pacman/db.lck
+
+		kill ${PPID} || killall pacman
 	fi
+}
+
+post_upgrade()
+{
+	systemctl daemon-reload
 }
 
 pre_remove()
