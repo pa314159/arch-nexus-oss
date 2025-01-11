@@ -1,8 +1,8 @@
 # Maintainer: pappy <pa314159@users.noreply.github.com>
 
 # https://help.sonatype.com/en/download-archives---repository-manager-3.html
-_version=3.74.0
-_patch=05
+_version=3.76.0
+_patch=03
 
 pkgname=nexus-oss
 pkgver=${_version}.${_patch}
@@ -25,7 +25,7 @@ source=(
 		"$pkgname.tmpfiles"
 		"pref_jre.cfg"
 		)
-sha256sums=('ef855f29c2d2c4a2359559f2ab12937caee89ef93ba13f69c84be3e5f6067928'
+sha256sums=('d336a1c1fa3c26ee977ef720707d7bbca660aee5bf7369a9037293910c63c672'
             'af6c075333c2b792bbe28820bde9f09d91da43dc3554c3ab6ab3cd7fa0cb85a6'
             'd4076f486fc6b2cc6bb457f874a2082c7ab018f407744b83f5edbd36573e00ac'
             '28d947b261c9087a16b0d5313aae92deccb03d4e109102eb702f4ab7e4899f44'
