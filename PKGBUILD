@@ -25,7 +25,7 @@ source=(
 		"$pkgname.tmpfiles"
 		"pref_jre.cfg"
 		)
-sha256sums=('d336a1c1fa3c26ee977ef720707d7bbca660aee5bf7369a9037293910c63c672'
+sha256sums=('539ec646cbbfa2e553ae1ea53fbda001fe2dd5f9fe943105f3ace243a128fce7'
             'af6c075333c2b792bbe28820bde9f09d91da43dc3554c3ab6ab3cd7fa0cb85a6'
             'd4076f486fc6b2cc6bb457f874a2082c7ab018f407744b83f5edbd36573e00ac'
             '28d947b261c9087a16b0d5313aae92deccb03d4e109102eb702f4ab7e4899f44'
