@@ -1,8 +1,8 @@
 # Maintainer: pappy <pa314159@users.noreply.github.com>
 
 # https://help.sonatype.com/en/download-archives---repository-manager-3.html
-_version=3.77.1
-_patch=01
+_version=3.78.2
+_patch=04
 
 pkgname=nexus-oss
 pkgver=${_version}.${_patch}
@@ -10,49 +10,67 @@ pkgrel=1
 pkgdesc='Nexus 3 Repository OSS'
 arch=('any')
 url='http://nexus.sonatype.org'
-license=("custom:$pkgname")
+license=("LicenseRef-$pkgname")
 depends=('java-runtime-headless=17')
 provides=($pkgname)
 backup=("var/lib/$pkgname/etc/nexus.properties"
-		"usr/lib/$pkgname/bin/nexus.vmoptions"
+		"etc/conf.d/$pkgname"
 		)
 source=(
-		"https://download.sonatype.com/nexus/3/nexus-$_version-$_patch-unix.tar.gz"
+		"https://download.sonatype.com/nexus/3/nexus-unix-x86-64-$_version-$_patch.tar.gz"
+		"$pkgname.sh"
+		"$pkgname.service"
+		"$pkgname.conf"
+		"$pkgname.tmpfiles"
+		"$pkgname.sysusers"
 		"$pkgname.install"
 		"$pkgname.properties"
-		"$pkgname.service"
-		"$pkgname.sysusers"
-		"$pkgname.tmpfiles"
-		"pref_jre.cfg"
 		)
-sha256sums=('539ec646cbbfa2e553ae1ea53fbda001fe2dd5f9fe943105f3ace243a128fce7'
-            'af6c075333c2b792bbe28820bde9f09d91da43dc3554c3ab6ab3cd7fa0cb85a6'
-            'd4076f486fc6b2cc6bb457f874a2082c7ab018f407744b83f5edbd36573e00ac'
-            '28d947b261c9087a16b0d5313aae92deccb03d4e109102eb702f4ab7e4899f44'
-            '77d699b5ccf6387fa2f69df2cd71cdb75b4ffbf46a10110dd6c0e2802783dbef'
+sha256sums=('c78a099374d33f6f31f784eb471a4cb34c670b5b7c99538d3ba38e0c1404bd63'
+            '07bd3fa49504b4ae85c7affd502c3ec3564aad7a34852e825eaef2fe994cf142'
+            '424d0d8f2bf6376f09c22b4fe9425899b8521999e86a1201650f4a4f342154b7'
+            'b38c7ca66cfe1f9e9866056df43d26a0d94ff09e78600d29636bef64cf755b87'
             'efd66ac28e622cdf58f5733bdced6654b170558834c3e4304b3a2dfb7d964994'
-            'b57a14b2462899a8b5c03e1b721e6fcae594934dcf0c4be842692b276d6700ae')
+            '77d699b5ccf6387fa2f69df2cd71cdb75b4ffbf46a10110dd6c0e2802783dbef'
+            'bff7354310f920d3062055cf04a695ec0eeb76e0ab275bd9ae27041c3a3c45ab'
+            'd4076f486fc6b2cc6bb457f874a2082c7ab018f407744b83f5edbd36573e00ac')
 
 install=$pkgname.install
 
 package() {
 	install -dm755 $pkgdir/usr/lib
+	install -dm775 $pkgdir/usr/share/licenses/$pkgname
 	install -dm750 $pkgdir/var/lib/$pkgname
 	install -dm750 $pkgdir/var/log/$pkgname
 
-	cp -a $srcdir/nexus-$_version-$_patch $pkgdir/usr/lib/$pkgname
+	rm -r nexus-$_version-$_patch/jdk
+	cp -a nexus-$_version-$_patch $pkgdir/usr/lib/$pkgname
 
-	install -Dm640 $srcdir/$pkgname.properties $pkgdir/var/lib/$pkgname/etc/nexus.properties
+	install -dm755 $pkgdir/usr/lib/sonatype-work
+	ln -s ../../../var/lib/$pkgname $pkgdir/usr/lib/sonatype-work/nexus3
+
+	install -Dm755 $pkgname.sh "$pkgdir/usr/lib/$pkgname/bin/nexus-oss"
 	install -Dm644 $pkgname.service "$pkgdir/usr/lib/systemd/system/$pkgname.service"
+	install -Dm644 $pkgname.conf "$pkgdir/etc/conf.d/$pkgname"
 	install -Dm644 $pkgname.tmpfiles "$pkgdir/usr/lib/tmpfiles.d/$pkgname.conf"
 	install -Dm644 $pkgname.sysusers "$pkgdir/usr/lib/sysusers.d/$pkgname.conf"
-	install -m644 pref_jre.cfg $pkgdir/usr/lib/$pkgname/.install4j
-	install -Dm644 $srcdir/nexus-$_version-$_patch/OSS-LICENSE.txt $pkgdir/usr/share/licenses/$pkgname/LICENSE
+	install -Dm644 $pkgname.properties $pkgdir/var/lib/$pkgname/etc/nexus.properties
 
 	pushd $pkgdir/usr/lib/$pkgname
-	sed -i s:../sonatype-work/nexus3:/var/lib/$pkgname:g bin/nexus.vmoptions
-	rm -rf bin/nexus.rc bin/contrib *LICENSE.txt
+	rm bin/nexus
+	sed -i \
+		-e "s:@version@:$_version:g" \
+		-e "s:@patch@:$_patch:g" \
+	   	bin/nexus-oss
+	sed -i -E \
+		-e "s:\.\./sonatype-work/nexus3:/var/lib/$pkgname:g" \
+		-e "s/#.*//" \
+		-e "/^\s*$/d" \
+		-e "/^-Xm/d" \
+		bin/nexus.vmoptions
+	install -Dm644 *.txt $pkgdir/usr/share/licenses/$pkgname
 	popd
 
 	chmod -R o-rwx $pkgdir/var/lib/$pkgname
 }
+

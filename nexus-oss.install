@@ -33,7 +33,7 @@ ver_lt()
 migration_done()
 {
 	if ! grep -q '^nexus.datastore.enabled=true' /var/lib/nexus-oss/etc/nexus.properties; then
-		logger -p error -s -t nexus-oss.pre-upgrade Nexus OSS still on OrionDB
+		logger -p error -s -t nexus-oss "[pre-upgrade]: Nexus OSS still on OrionDB"
 
 		return 1
 	fi
@@ -63,6 +63,23 @@ pre_upgrade()
 
 post_upgrade()
 {
+	if [[ -f /usr/lib/nexus-oss/bin/nexus.vmoptions.pacsave ]]; then
+		mem=$(sed -n '/-Xmx/ { s:-Xmx::; p }' /usr/lib/nexus-oss/bin/nexus.vmoptions.pacsave|head -1)
+
+		if [[ $mem != 2703m ]]; then
+			(
+				unset NEXUS_MEMORY
+				source /etc/conf.d/nexus-oss
+				if [[ -z $NEXUS_MEMORY ]]; then
+					sed -i /NEXUS_MEMORY/d /etc/conf.d/nexus-oss
+					echo NEXUS_MEMORY=$mem >>/etc/conf.d/nexus-oss
+
+					logger -p notice -s -t nexus-oss "[post-upgrade]: Mmemory configured as $mem in /etc/conf.d/nexus-oss"
+				fi
+			)
+		fi
+	fi
+
 	systemctl daemon-reload
 }
 

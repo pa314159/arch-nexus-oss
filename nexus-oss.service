@@ -3,13 +3,13 @@ Description=Nexus 3 Repository OSS
 After=network.target
 
 [Service]
-Type=forking
+Type=simple
 LimitNPROC=65536
 LimitNOFILE=65536
 User=nexus
 Group=nexus
-ExecStart=/usr/lib/nexus-oss/bin/nexus start
-ExecStop=/usr/lib/nexus-oss/bin/nexus stop
+EnvironmentFile=/etc/conf.d/nexus-oss
+ExecStart=/usr/lib/nexus-oss/bin/nexus-oss
 Restart=on-abort
 
 [Install]
