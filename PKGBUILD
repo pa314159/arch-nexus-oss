@@ -1,7 +1,7 @@
 # Maintainer: pappy <pa314159@users.noreply.github.com>
 
 # https://help.sonatype.com/en/download-archives---repository-manager-3.html
-_version=3.78.2
+_version=3.79.1
 _patch=04
 
 pkgname=nexus-oss
@@ -17,7 +17,7 @@ backup=("var/lib/$pkgname/etc/nexus.properties"
 		"etc/conf.d/$pkgname"
 		)
 source=(
-		"https://download.sonatype.com/nexus/3/nexus-unix-x86-64-$_version-$_patch.tar.gz"
+		"https://download.sonatype.com/nexus/3/nexus-$_version-$_patch-linux-x86_64.tar.gz"
 		"$pkgname.sh"
 		"$pkgname.service"
 		"$pkgname.conf"
@@ -26,7 +26,7 @@ source=(
 		"$pkgname.install"
 		"$pkgname.properties"
 		)
-sha256sums=('c78a099374d33f6f31f784eb471a4cb34c670b5b7c99538d3ba38e0c1404bd63'
+sha256sums=('048b5b588fcb337576f47e1cf8e89fb59273406b6b0789e90eb8f58726754115'
             '07bd3fa49504b4ae85c7affd502c3ec3564aad7a34852e825eaef2fe994cf142'
             '424d0d8f2bf6376f09c22b4fe9425899b8521999e86a1201650f4a4f342154b7'
             'b38c7ca66cfe1f9e9866056df43d26a0d94ff09e78600d29636bef64cf755b87'
