@@ -1,8 +1,8 @@
 # Maintainer: pappy <pa314159@users.noreply.github.com>
 
 # https://help.sonatype.com/en/download-archives---repository-manager-3.html
-_version=3.82.0
-_patch=08
+_version=3.84.0
+_patch=03
 
 pkgname=nexus-oss
 pkgver=${_version}.${_patch}
@@ -26,7 +26,7 @@ source=(
 		"$pkgname.install"
 		"$pkgname.properties"
 		)
-sha256sums=('697eacdda855e6f81a861465b7febaf190da12c4aa298268805b87d894302d35'
+sha256sums=('7ed69401091f83fbb62534b7dcf2a309d7d1542b2d1e798e2f30627925546dd6'
             '07bd3fa49504b4ae85c7affd502c3ec3564aad7a34852e825eaef2fe994cf142'
             '424d0d8f2bf6376f09c22b4fe9425899b8521999e86a1201650f4a4f342154b7'
             'b38c7ca66cfe1f9e9866056df43d26a0d94ff09e78600d29636bef64cf755b87'
